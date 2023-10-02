@@ -85,7 +85,30 @@ fn main() {
     let same: [i32; 5] = [0; 5]; // [0, 0, 0, 0, 0]
     println!("{}", a[3]);
     println!("{}", same[0]);
+    output_array_index(a);
 
+    another_function();
+    print_measurement("Timo", 12);
+
+    // statement -> does not return a value
+    let statement: i32 = 6;
+    // let statement = statement2 = 6 is not allowed in Rust
+
+    // expression -> return a value
+    let expression: i32 = {
+        let x = 5;
+        x + 2 // this return a value therefore an expression -> notice the missing semicolon
+    };
+
+    // function with return statement
+    let return_value: i32 = function_with_return(expression);
+}
+
+fn function_with_return(parameter: i32) -> i32 {
+    parameter * 5 // same as return parameter * 5
+}
+
+fn output_array_index(a: [i32; 5]) {
     println!("Array: {:?}", a);
     println!("Input number index: ");
 
@@ -94,9 +117,19 @@ fn main() {
         .read_line(&mut index)
         .expect("Error reading line");
 
-    let index: u64 = index.trim()
+    let index: u64 = index
+        .trim()
         .parse()
         .expect("Can not convert to integer for index.");
 
     println!("Data for index {} is {}", index, a[index as usize]);
+}
+
+// function can be defined anywhere
+fn another_function() {
+    println!("Test from another function");
+}
+
+fn print_measurement(word: &str, length: i32) {
+    println!("Test {word} + {length}");
 }
