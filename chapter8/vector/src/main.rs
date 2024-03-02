@@ -1,3 +1,7 @@
+
+
+use std::net::TcpListener;
+
 #[derive(Debug)]
 enum SpreadsheetCell {
     Int(i32),
@@ -18,11 +22,13 @@ fn main() {
     dbg!(third);
     let third_get = v_macro.get(2);
     dbg!(third_get);
+    dbg!(v_macro.get(5));
+
     match third_get {
         Some(third) => {
             println!("The third element is {}", third);
         },
-        None => println!("There is no third element."), 
+        None => println!("There is no third element."),
     };
 
     // will make the program panic
@@ -33,10 +39,11 @@ fn main() {
     // iterate over vector
     for i in &v_macro {
         println!("{}", i);
-
     }
 
 
+
+    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
     //iterate and mutate
     for i in &mut mutable_v {
         *i += 50;
@@ -49,6 +56,8 @@ fn main() {
         SpreadsheetCell::Float(10.12),
     ];
     dbg!(row);
+
+    
 
 
 
