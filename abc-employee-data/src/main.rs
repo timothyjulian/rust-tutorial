@@ -1,27 +1,22 @@
+mod database;
+mod employee;
+mod menu;
+
 use std::error;
-use std::io::{self, prelude::*, Write};
+use std::io::{self, Write};
 use std::process;
 
-fn pause() {
-    let mut stdin = io::stdin();
-    let mut stdout = io::stdout();
-
-    // We want the cursor to stay at the end of the line, so we print without a newline and flush manually.
-    write!(stdout, "Press any key to continue...").unwrap();
-    stdout.flush().unwrap();
-
-    // Read a single byte and discard
-    let _ = stdin.read(&mut [0u8]).unwrap();
-}
+use database::Database;
 
 fn main() -> Result<(), Box<dyn error::Error>> {
+    let mut database = Database::new();
     loop {
         let mut menu: String = String::new();
 
-        println!("ABC EMPLOYEE DATA");
+        println!("\nABC EMPLOYEE DATA");
         println!("==================");
         println!("1. Add employee");
-        println!("2. Vie employee");
+        println!("2. View employee");
         println!("3. Resign");
         println!("4. Exit");
         print!("Choice: ");
@@ -29,24 +24,34 @@ fn main() -> Result<(), Box<dyn error::Error>> {
 
         if let Err(_) = io::stdin().read_line(&mut menu) {
             println!("Failed to read line");
-            pause();
+            menu::pause();
         }
 
         let menu: u32 = match menu.trim().parse() {
             Ok(val) => val,
             Err(_) => {
                 println!("Please input a number...");
-                pause();
+                menu::pause();
                 continue;
             }
         };
 
-        if menu < 1 || menu > 4 {
-            println!("Please input a valid menu...");
-            pause();
-            continue;
-        }
-
-
+        match menu {
+            1 => {
+                menu::add_employee(&mut database);
+            }
+            2 => {
+                menu::get_all_employee(&database);
+            }
+            3 => {}
+            4 => {
+                process::exit(1);
+            }
+            _ => {
+                println!("Please input a valid menu...");
+                menu::pause();
+                continue;
+            }
+        };
     }
 }
