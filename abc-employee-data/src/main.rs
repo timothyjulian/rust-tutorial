@@ -42,8 +42,11 @@ fn main() -> Result<(), Box<dyn error::Error>> {
             }
             2 => {
                 menu::get_all_employee(&database);
+                menu::pause();
             }
-            3 => {}
+            3 => {
+                menu::resign_employee(&mut database)
+            }
             4 => {
                 process::exit(1);
             }

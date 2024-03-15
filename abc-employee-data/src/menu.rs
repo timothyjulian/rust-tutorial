@@ -149,9 +149,77 @@ pub fn get_all_employee(database: &Database) {
             }
         }
         println!("========================");
+        match employee.status {
+            true => {
+                println!("Status: active");
+            }
+            false => {
+                println!("Status: not active");
+            }
+        }
         println!("Name: {}", employee.name);
         println!("Age: {}", employee.age);
         println!("Role: {}", employee.role);
+        match employee.salary {
+            Salary::FullTimeSalary { base_salary } => {
+                println!("Base salary per month: {}", base_salary);
+            }
+            Salary::PartTimeSalary { pay_per_hour, working_hour_per_week } => {
+                println!("Pay per hour: {}", pay_per_hour);
+                println!("Working hour per week: {}", working_hour_per_week);
+                println!("Salary per month: {}", pay_per_hour * working_hour_per_week);
+            }
+            
+        }
+    }
+    println!("\n")
+}
+
+pub fn resign_employee(database: &mut Database) {
+    get_all_employee(&database);
+    let employee_list: &mut Vec<Employee> = database.get_mutable_all_employee();
+
+
+    let mut resign_index: i32;
+    loop {
+        print!("Input employee number that wat to resign[1..{}]: ", employee_list.len());
+        io::stdout().flush().unwrap();
+        let mut resign_index_string = String::new();
+        if let Err(_) = io::stdin().read_line(&mut resign_index_string) {
+            println!("Failed to read line");
+            pause();
+            continue;
+        }
+        
+        resign_index = match resign_index_string.trim().parse() {
+            Ok(resign_index) => resign_index,
+            Err(_) => {
+                println!("Failed to parse resign index");
+                pause();
+                continue;
+            }
+        };
+
+        if resign_index < 1 || resign_index > employee_list.len() as i32 {
+            continue;
+        }
+
+        break;
+    }
+    resign_index -=1;
+    let employee = employee_list.get_mut(resign_index as usize).unwrap();
+    match employee.status {
+        true =>  {
+            println!("{} is resigning...", employee.name);
+            employee.status = false;
+            pause();
+            return;
+        }
+        false => {
+            println!("Employee has already resigned!");
+            return;
+        }
+        
     }
 }
 

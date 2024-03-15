@@ -103,12 +103,13 @@ pub struct Employee {
     pub age: i32,
     pub role: Role,
     pub work_type: WorkType,
-    pub salary: Salary
+    pub salary: Salary,
+    pub status: bool,
 }
 
 impl Employee {
     pub fn new(name: String, age: i32, role: Role, work_type: WorkType, salary: Salary) -> Result<Employee, Box<dyn Error>> {
-        Ok(Employee { name, age, role, work_type, salary })
+        Ok(Employee { name, age, role, work_type, salary, status: true })
     }
 
 }

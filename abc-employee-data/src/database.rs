@@ -18,4 +18,8 @@ impl Database {
     pub fn get_all_employee<'a>(&'a self) -> &'a Vec<Employee> {
         &self.employee_list
     }
+
+    pub fn get_mutable_all_employee<'a>(&'a mut self) -> &'a mut Vec<Employee> {
+        &mut self.employee_list
+    }
 }
