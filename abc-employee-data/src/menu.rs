@@ -1,22 +1,25 @@
-use std::io::{self, prelude::*, Write};
+use std::io;
+use std::io::prelude::*;
+use std::io::Write;
 
-use crate::{database::Database, employee::{Employee, Role, Salary, WorkType}};
-
+use crate::database::Database;
+use crate::model::employee::Employee;
+use crate::model::role::Role;
+use crate::model::work_type::WorkType;
+use crate::model::salary::Salary;
+use crate::input;
 
 pub fn add_employee(database: &mut Database) {
-
     let mut name;
     loop {
-        name = String::new();
-        print!("Input employee name[must be nore than 3 characters]: ");
-        io::stdout().flush().unwrap();
-        
-        if let Err(_) = io::stdin().read_line(&mut name) {
-            println!("Failed to read line");
-            pause();
-            continue;
-        }
-        name = name.trim().to_string();
+        name = match input::get_input_string("Input employee name[must be nore than 3 characters]: ")  {
+            Ok(name) => name,
+            Err(err) => {
+                println!("{}", err);
+                pause();
+                continue;
+            }
+        };
         if name.len() <= 3 {
             continue;
         }
@@ -26,22 +29,12 @@ pub fn add_employee(database: &mut Database) {
 
     let mut age: i32;
     loop {
-        let mut age_string = String::new();
-        print!("Input employee age[>= 17]: ");
-        io::stdout().flush().unwrap();
-        
-        if let Err(_) = io::stdin().read_line(&mut age_string) {
-            println!("Failed to read line");
-            pause();
-            continue;
-        }
-
-        age = match age_string.trim().parse()  {
+        age = match input::get_input_i32("Input employee age[>=17]: ")  {
             Ok(age) => {
                 age
             },
-            Err(_) => {
-                println!("Please input a number...");
+            Err(err) => {
+                println!("{}", err);
                 pause();
                 continue;
             }
@@ -58,18 +51,14 @@ pub fn add_employee(database: &mut Database) {
     let role: Role;
 
     loop {
-        let mut role_string = String::new();
-        print!("Input employee role[Assistant | Programmer](Case Sensitive): ");
-        io::stdout().flush().unwrap();
-
-
-        if let Err(_) = io::stdin().read_line(&mut role_string) {
-            println!("Failed to read line");
-            pause();
-            continue;
-        }
-
-        role_string = role_string.trim().to_string();
+        let role_string = match input::get_input_string("Input employee role[Assistant | Programmer](Case Sensitive): ") {
+            Ok(role_string) => role_string,
+            Err(err) => {
+                println!("{}", err);
+                pause();
+                continue;
+            }
+        };
 
         if role_string.ne("Assistant") && role_string.ne("Programmer") {
             continue;
@@ -89,17 +78,14 @@ pub fn add_employee(database: &mut Database) {
 
     let work_type: WorkType;
     loop {
-        let mut work_type_string = String::new();
-        print!("Input employee type[PartTime | FullTime](Case Sensitive): ");
-        io::stdout().flush().unwrap();
-
-        if let Err(_) = io::stdin().read_line(&mut work_type_string) {
-            println!("Failed to read line");
-            pause();
-            continue;
-        }
-
-        work_type_string = work_type_string.trim().to_string();
+        let work_type_string = match input::get_input_string("Input employee type[PartTime | FullTime](Case Sensitive): ") {
+            Ok(work_type_string) => work_type_string,
+            Err(err) => {
+                println!("{}", err);
+                pause();
+                continue;
+            }
+        };
 
         if work_type_string.ne("PartTime") && work_type_string.ne("FullTime") {
             continue;
@@ -179,7 +165,6 @@ pub fn resign_employee(database: &mut Database) {
     get_all_employee(&database);
     let employee_list: &mut Vec<Employee> = database.get_mutable_all_employee();
 
-
     let mut resign_index: i32;
     loop {
         print!("Input employee number that wat to resign[1..{}]: ", employee_list.len());
@@ -203,7 +188,6 @@ pub fn resign_employee(database: &mut Database) {
         if resign_index < 1 || resign_index > employee_list.len() as i32 {
             continue;
         }
-
         break;
     }
     resign_index -=1;
@@ -222,7 +206,6 @@ pub fn resign_employee(database: &mut Database) {
         
     }
 }
-
 
 pub fn pause() {
     let mut stdin = io::stdin();
@@ -335,5 +318,4 @@ fn salary_input(work_type: &WorkType) -> Salary {
             Salary::new_full_time_salary(base_salary)
         }
     }
-
 }

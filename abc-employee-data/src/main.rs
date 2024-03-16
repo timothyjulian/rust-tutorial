@@ -1,6 +1,7 @@
 mod database;
-mod employee;
 mod menu;
+mod input;
+mod model;
 
 use std::error;
 use std::io::{self, Write};

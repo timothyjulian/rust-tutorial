@@ -1,4 +1,4 @@
-use crate::employee::Employee;
+use crate::model::employee::Employee;
 
 pub struct Database {
     pub employee_list: Vec<Employee>,
