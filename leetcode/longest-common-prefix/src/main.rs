@@ -1,5 +1,7 @@
 use std::{f32::MIN, i32, ptr::null};
 
+
+#[derive(Debug)]
 struct Solution {}
 
 impl Solution {
