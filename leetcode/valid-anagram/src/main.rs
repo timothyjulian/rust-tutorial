@@ -5,6 +5,7 @@ pub fn is_anagram(s: String, t: String) -> bool {
         return false;
     }
 
+
     let mut stored_char = HashMap::new();
     for c in s.chars() {
         let count = stored_char.entry(c).or_insert(0);
